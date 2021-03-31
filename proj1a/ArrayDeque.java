@@ -22,6 +22,8 @@ public class ArrayDeque<T> {
             test.addFirst(i);
         }
         test.printDeque();
+        System.out.println(test.get(0));
+        System.out.println(test.get(7));
     }
 
     /* Adds an item of type T to the front of the deque*/
@@ -87,7 +89,7 @@ public class ArrayDeque<T> {
     /*Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
     If no such item exists, returns null. Must not alter the deque. */
     public T get(int index) {
-        return null;
+        return items[Math.floorMod((start + index), items.length)];
     }
 
 }
