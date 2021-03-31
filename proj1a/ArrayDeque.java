@@ -17,13 +17,18 @@ public class ArrayDeque<T> {
     public static void main(String[] args) {
         System.out.println();
         ArrayDeque<Integer> test = new ArrayDeque<>();
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             test.addLast(i);
             test.addFirst(i);
         }
         test.printDeque();
         System.out.println(test.get(0));
-        System.out.println(test.get(7));
+        test.removeFirst();
+        test.printDeque();
+        System.out.println(test.get(0));
+        test.removeLast();
+        test.printDeque();
+        System.out.println(test.get(0));
     }
 
     /* Adds an item of type T to the front of the deque*/
@@ -45,7 +50,6 @@ public class ArrayDeque<T> {
             items = tmp;
             start = 0;
         }
-
     }
 
     /*Adds an item of type T to the back of the deque*/
@@ -67,7 +71,7 @@ public class ArrayDeque<T> {
         return size;
     }
 
-    /*Prints the items in the deque from first to last, separated bu a space.
+    /*Prints the items in the deque from first to last, separated by a space.
      Once all the items have been printed, print out a new line*/
     public void printDeque() {
         for(int i = 0; i < size; i++) {
@@ -78,12 +82,23 @@ public class ArrayDeque<T> {
 
     /*Removes and returns the item at the front of the deque, If no such item exists, return null*/
     public T removeFirst() {
-        return null;
+        if (isEmpty()) {
+            return null;
+        }
+        T first = items[start];
+        start = Math.floorMod((start + 1), items.length);
+        size = size - 1;
+        return first;
     }
 
     /*Removes and returns the item at the back of the deque, If no such item exists, return null*/
     public T removeLast() {
-        return null;
+        if (isEmpty()) {
+            return null;
+        }
+        T last = items[Math.floorMod((start + size), items.length)];
+        size = size - 1;
+        return last;
     }
 
     /*Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
