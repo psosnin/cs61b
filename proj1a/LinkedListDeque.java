@@ -26,7 +26,7 @@ public class LinkedListDeque<T> {
         sentinel.prev = sentinel;
     }
 
-    /*Creates a deep copy of "other"*/
+    /*Creates a deep copy of "other"
     public LinkedListDeque(LinkedListDeque other) {
         size = other.size();
         sentinel = new DNode();
@@ -35,7 +35,7 @@ public class LinkedListDeque<T> {
         while (!other.isEmpty()) {
             addLast((T) other.removeFirst());
         }
-    }
+    }*/
 
     /* Adds an item of type T to the front of the deque*/
     public void addFirst(T item) {

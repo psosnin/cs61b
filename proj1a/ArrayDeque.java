@@ -11,26 +11,6 @@ public class ArrayDeque<T> {
         items = (T[]) new Object[8];
     }
 
-    /*Creates a deep copy of "other"
-    public ArrayDeque(ArrayDeque other) {
-    }*/
-    public static void main(String[] args) {
-        System.out.println();
-        ArrayDeque<Integer> test = new ArrayDeque<>();
-        for (int i = 0; i < 16; i++) {
-            test.addLast(i);
-            test.addFirst(i);
-        }
-        for (int i = 0; i < 16; i ++){
-            test.removeLast();
-            test.removeFirst();
-        }
-        System.out.println(test.removeFirst());
-        test.printDeque();
-        System.out.println(test.removeLast());
-        test.printDeque();
-    }
-
     /* Adds an item of type T to the front of the deque*/
     public void addFirst(T item) {
         if (size >= items.length) {
@@ -42,8 +22,8 @@ public class ArrayDeque<T> {
     }
 
     /* Resizes the items array to a new capacity */
-    public void resizeItems(int cap) {
-        assert(cap >= size);
+    private void resizeItems(int cap) {
+        assert (cap >= size);
         if (cap > items.length) {
             T[] tmp = (T[]) new Object[cap];
             System.arraycopy(items, start, tmp, 0, items.length - start);
@@ -91,7 +71,7 @@ public class ArrayDeque<T> {
     public T removeFirst() {
         if (isEmpty()) {
             return null;
-        } else if (items.length >= 16 && ((double) size / items.length) < 0.25 ) {
+        } else if (items.length >= 16 && ((double) size / items.length) <= 0.25) {
             resizeItems(items.length / 2);
         }
         T first = items[start];
@@ -104,7 +84,7 @@ public class ArrayDeque<T> {
     public T removeLast() {
         if (isEmpty()) {
             return null;
-        } else if (items.length >= 16 && ((double) size / items.length) < 0.25 ) {
+        } else if (items.length >= 16 && ((double) size / items.length) <= 0.25) {
             resizeItems(items.length / 2);
         }
         size = size - 1;
