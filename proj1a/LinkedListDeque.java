@@ -32,14 +32,20 @@ public class LinkedListDeque<T> {
         test.addFirst(10);
         test.addFirst(8);
         test.addLast(12);
-        System.out.println(test.getRecursive(1));
-        System.out.println(test.getRecursive(0));
-        System.out.println(test.getRecursive(13));
+        test.printDeque();
+        LinkedListDeque copy = new LinkedListDeque(test);
+        copy.printDeque();
     }
 
     /*Creates a deep copy of "other"*/
     public LinkedListDeque(LinkedListDeque other) {
-
+        size = other.size();
+        sentinel = new DNode();
+        sentinel.next = sentinel;
+        sentinel.prev = sentinel;
+        while (!other.isEmpty()) {
+            addLast((T) other.removeFirst());
+        }
     }
 
     /* Adds an item of type T to the front of the deque*/
@@ -110,8 +116,8 @@ public class LinkedListDeque<T> {
         if (index < size) {
             DNode ptr = sentinel.next;
             while (index > 0) {
-               ptr = ptr.next;
-               index = index - 1;
+                ptr = ptr.next;
+                index = index - 1;
             }
             return ptr.item;
         }
@@ -122,17 +128,15 @@ public class LinkedListDeque<T> {
     public T getRecursive(int index) {
         if (index >= size) {
             return null;
-        }
-        else {
+        } else {
             return getRecursiveHelper(sentinel.next, index);
         }
     }
 
-    private T getRecursiveHelper(DNode start, int index){
+    private T getRecursiveHelper(DNode start, int index) {
         if (index == 0) {
             return start.item;
-        }
-        else {
+        } else {
             return getRecursiveHelper(start.next, index - 1);
         }
     }
