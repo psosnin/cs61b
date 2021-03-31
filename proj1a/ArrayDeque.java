@@ -17,36 +17,43 @@ public class ArrayDeque<T> {
     public static void main(String[] args) {
         System.out.println();
         ArrayDeque<Integer> test = new ArrayDeque<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 16; i++) {
             test.addLast(i);
             test.addFirst(i);
         }
+        for (int i = 0; i < 16; i ++){
+            test.removeLast();
+            test.removeFirst();
+        }
+        System.out.println(test.removeFirst());
         test.printDeque();
-        System.out.println(test.get(0));
-        test.removeFirst();
+        System.out.println(test.removeLast());
         test.printDeque();
-        System.out.println(test.get(0));
-        test.removeLast();
-        test.printDeque();
-        System.out.println(test.get(0));
     }
 
     /* Adds an item of type T to the front of the deque*/
     public void addFirst(T item) {
         if (size >= items.length) {
-            resizeItems(items.length*2);
+            resizeItems(items.length * 2);
         }
-        items[Math.floorMod((start-1), items.length)] = item;
-        start = Math.floorMod((start-1),items.length);
+        items[Math.floorMod((start - 1), items.length)] = item;
+        start = Math.floorMod((start - 1), items.length);
         size = size + 1;
     }
 
     /* Resizes the items array to a new capacity */
-    public void resizeItems(int cap){
+    public void resizeItems(int cap) {
+        assert(cap >= size);
         if (cap > items.length) {
             T[] tmp = (T[]) new Object[cap];
-            System.arraycopy(items, start, tmp, 0, items.length - start );
+            System.arraycopy(items, start, tmp, 0, items.length - start);
             System.arraycopy(items, 0, tmp, items.length - start, start);
+            items = tmp;
+            start = 0;
+        } else {
+            T[] tmp = (T[]) new Object[cap];
+            System.arraycopy(items, start, tmp, 0, cap - start);
+            System.arraycopy(items, 0, tmp, cap - start, start);
             items = tmp;
             start = 0;
         }
@@ -55,7 +62,7 @@ public class ArrayDeque<T> {
     /*Adds an item of type T to the back of the deque*/
     public void addLast(T item) {
         if (size >= items.length) {
-            resizeItems(items.length*2);
+            resizeItems(items.length * 2);
         }
         items[(start + size) % items.length] = item;
         size = size + 1;
@@ -74,7 +81,7 @@ public class ArrayDeque<T> {
     /*Prints the items in the deque from first to last, separated by a space.
      Once all the items have been printed, print out a new line*/
     public void printDeque() {
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             System.out.print(items[Math.floorMod((start + i), items.length)] + " ");
         }
         System.out.println();
@@ -84,6 +91,8 @@ public class ArrayDeque<T> {
     public T removeFirst() {
         if (isEmpty()) {
             return null;
+        } else if (items.length >= 16 && ((double) size / items.length) < 0.25 ) {
+            resizeItems(items.length / 2);
         }
         T first = items[start];
         start = Math.floorMod((start + 1), items.length);
@@ -95,9 +104,11 @@ public class ArrayDeque<T> {
     public T removeLast() {
         if (isEmpty()) {
             return null;
+        } else if (items.length >= 16 && ((double) size / items.length) < 0.25 ) {
+            resizeItems(items.length / 2);
         }
-        T last = items[Math.floorMod((start + size), items.length)];
         size = size - 1;
+        T last = items[Math.floorMod((start + size), items.length)];
         return last;
     }
 
@@ -106,5 +117,4 @@ public class ArrayDeque<T> {
     public T get(int index) {
         return items[Math.floorMod((start + index), items.length)];
     }
-
 }
