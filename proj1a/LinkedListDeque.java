@@ -26,17 +26,6 @@ public class LinkedListDeque<T> {
         sentinel.prev = sentinel;
     }
 
-    public static void main(String[] args) {
-        LinkedListDeque test = new LinkedListDeque();
-        System.out.println(test.isEmpty());
-        test.addFirst(10);
-        test.addFirst(8);
-        test.addLast(12);
-        test.printDeque();
-        LinkedListDeque copy = new LinkedListDeque(test);
-        copy.printDeque();
-    }
-
     /*Creates a deep copy of "other"*/
     public LinkedListDeque(LinkedListDeque other) {
         size = other.size();
