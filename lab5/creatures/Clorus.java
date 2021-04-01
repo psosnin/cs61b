@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author Josh Hug
  */
-public class Plip extends Creature {
+public class Clorus extends Creature {
 
     /**
      * red color.
@@ -31,86 +31,74 @@ public class Plip extends Creature {
     private int b;
 
     /**
-     * creates plip with energy equal to E.
+     * creates clorus with energy equal to E.
      */
-    public Plip(double e) {
-        super("plip");
-        r = 99;
-        g = 63 + (int) e * 96;
-        b = 76;
+    public Clorus(double e) {
+        super("clorus");
+        r = 34;
+        g = 0;
+        b = 231;
         energy = e;
     }
 
     /**
-     * creates a plip with energy equal to 1.
+     * creates a clorus with energy equal to 1.
      */
-    public Plip() {
+    public Clorus() {
         this(1);
     }
 
-    /**
-     * Should return a color with red = 99, blue = 76, and green that varies
-     * linearly based on the energy of the Plip. If the plip has zero energy,
-     * it should have a green value of 63. If it has max energy, it should
-     * have a green value of 255. The green value should vary with energy
-     * linearly in between these two extremes. It's not absolutely vital
-     * that you get this exactly correct.
-     */
     public Color color() {
-        g = 96* ((int) energy) + 63;
         return color(r, g, b);
     }
 
     /**
-     * Do nothing with C, Plips are pacifists.
+     *  The clorus should gain the other creature's energy
      */
     public void attack(Creature c) {
-        // do nothing.
+        energy += c.energy();
     }
 
     /**
-     * Plips should lose 0.15 units of energy when moving. If you want to
-     * to avoid the magic number warning, you'll need to make a
-     * private static final variable. This is not required for this lab.
+     * Clorus lose 0.03 energy when moving
      */
     public void move() {
-        if (energy <= 0.15) {
+        if (energy <= 0.03) {
             energy = 0.0;
         } else {
-            energy -= 0.15;
+            energy -= 0.03;
         }
     }
 
 
     /**
-     * Plips gain 0.2 energy when staying due to photosynthesis.
+     * Clorus lose 0.01 energy when staying
      */
     public void stay() {
-        if (energy >= 1.8) {
-            energy = 2.0;
+        if (energy <= 0.01) {
+            energy = 0.0;
         } else {
-            energy += 0.2;
+            energy -= 0.01;
         }
     }
 
     /**
-     * Plips and their offspring each get 50% of the energy, with none
+     * Clorus and their offspring each get 50% of the energy, with none
      * lost to the process. Now that's efficiency! Returns a baby
-     * Plip.
+     * Clorus.
      */
-    public Plip replicate() {
+    public Clorus replicate() {
         energy = energy * 0.5;
-        return new Plip(energy);
+        return new Clorus(energy);
     }
 
     /**
-     * Plips take exactly the following actions based on NEIGHBORS:
+     * Clorus take exactly the following actions based on NEIGHBORS:
      * 1. If no empty adjacent spaces, STAY.
-     * 2. Otherwise, if energy >= 1, REPLICATE towards an empty direction
-     * chosen at random.
-     * 3. Otherwise, if any Cloruses, MOVE with 50% probability,
-     * towards an empty direction chosen at random.
-     * 4. Otherwise, if nothing else, STAY
+     * 2. Otherwise, if any plips are seen the clorus will attack one of them randomly
+     * 3. Otherwise, if the clorus has an energy greater than or equal to one, it will
+     * replicate to a random empty square
+     * 4. Otherwise, it will move to a random empty square
      * <p>
      * Returns an object of type Action. See Action.java for the
      * scoop on how Actions work. See SampleCreature.chooseAction()
@@ -118,31 +106,29 @@ public class Plip extends Creature {
      */
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
-        boolean anyClorus = false;
+        Deque<Direction> plipNeighbors = new ArrayDeque<>();
 
         for (Map.Entry<Direction, Occupant> entry : neighbors.entrySet()) {
             Direction direction = entry.getKey();
             Occupant value = entry.getValue();
             if (value.name() == "empty") {
                 emptyNeighbors.add(direction);
-            } else if (value.name() == "clorus") {
-                anyClorus = true;
+            } else if (value.name() == "plip") {
+                plipNeighbors.add(direction);
             }
         }
+
         if (emptyNeighbors.isEmpty()) {
             return new Action(Action.ActionType.STAY);
+        } else if (!plipNeighbors.isEmpty()) {
+            return new Action(Action.ActionType.ATTACK, selectRandom(plipNeighbors));
         } else if (energy >= 1.0) {
             return new Action(Action.ActionType.REPLICATE, selectRandom(emptyNeighbors));
-        } else if (anyClorus == true) {
-            if (Math.random() > 0.5) {
-                return new Action(Action.ActionType.MOVE, selectRandom(emptyNeighbors));
-            } else {
-                return new Action(Action.ActionType.STAY);
-            }
         } else {
-            return new Action(Action.ActionType.STAY);
+            return new Action(Action.ActionType.MOVE, selectRandom(emptyNeighbors));
         }
     }
+
     private Direction selectRandom(Deque<Direction> directions) {
         Direction dir = directions.getFirst();
         for (int i = 0; i < Math.random()*directions.size(); i++) {
