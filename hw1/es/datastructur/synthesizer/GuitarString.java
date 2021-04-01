@@ -18,17 +18,12 @@ public class GuitarString {
 
     /* Pluck the guitar string by replacing the buffer with white noise. */
     public void pluck() {
-        // TODO: Dequeue everything in buffer, and replace with random numbers
-        //       between -0.5 and 0.5. You can get such a number by using:
-        //       double r = Math.random() - 0.5;
-        //
-        //       Make sure that your random numbers are different from each
-        //       other.
+
         while (!buffer.isEmpty()) {
             buffer.dequeue();
         }
         while (!buffer.isFull()) {
-            buffer.enqueue(0.1);
+            buffer.enqueue(Math.random() - 0.5);
         }
     }
 
@@ -36,15 +31,18 @@ public class GuitarString {
      * the Karplus-Strong algorithm.
      */
     public void tic() {
-        // TODO: Dequeue the front sample and enqueue a new sample that is
-        //       the average of the two multiplied by the DECAY factor.
-        //       Do not call StdAudio.play().
+        if (buffer.isEmpty()) {
+            return;
+        }
+        double front = buffer.dequeue();
+        buffer.enqueue((front + buffer.peek()) * DECAY / 2);
     }
 
     /* Return the double at the front of the buffer. */
     public double sample() {
-        // TODO: Return the correct thing.
-        return 0;
+        if (buffer.isEmpty()) {
+            return 0;
+        }
+        return buffer.peek();
     }
 }
-    // TODO: Remove all comments that say TODO when you're done.

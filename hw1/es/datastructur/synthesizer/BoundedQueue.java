@@ -1,5 +1,4 @@
 package es.datastructur.synthesizer;
-
 public interface BoundedQueue<T> {
 
     /* return the size of the buffer */
