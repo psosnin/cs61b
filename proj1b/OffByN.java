@@ -8,6 +8,6 @@ public class OffByN implements CharacterComparator {
     /** Returns true if characters are numerically off by N*/
     @Override
     public boolean equalChars(char x, char y) {
-            return Math.abs(x - y) == num;
-        }
+        return Math.abs(x - y) == num;
+    }
 }

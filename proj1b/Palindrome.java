@@ -1,6 +1,7 @@
 public class Palindrome {
 
-    /* Given a string, return a Deque where the characters appear in the same order as in the string */
+    /* Given a string, return a Deque where the characters appear in
+    the same order as in the string */
     public Deque<Character> wordToDeque(String word) {
         if (word == null) {
             return null;
